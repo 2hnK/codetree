@@ -24,6 +24,7 @@ public class Main {
             case '/':
                 res = division(x, y);
                 System.out.println(x + " " + o + " " + y + " = " + res);
+                break;
             default:
                 res = -1;
                 System.out.println("False");
