@@ -7,39 +7,23 @@ public class Main {
         int d = sc.nextInt();
 
         // Please write your code here.
-        int[] m31 = {1, 3, 5, 7, 8, 10, 12};
-        int[] m30 = {4, 6, 9, 11};
         boolean leapYear = isLeapYear(y);
 
-        // process month 2
-        if(m == 2 && leapYear && validDay(d, 29)) printSeason(m);
-        else if(m == 2 && !leapYear && validDay(d, 28)) printSeason(m);
-        else if(m == 2) System.out.println("-1");
-
-        // process month 1, 3, 5, 7, 8, 10, 12
-        for(int x : m31) {
-            if(x == m && validDay(d, 31))
-                printSeason(m);
-            else if(x == m)
-                System.out.println("-1");
+        if(!validMonth(m)) {
+            System.out.println("-1");
+            return;
         }
 
-        // process month 4, 6, 9, 11
-        for(int x : m30) {
-            if(x == m && validDay(d, 30))
-                printSeason(m);
-            else if(x == m)
-                System.out.println("-1");
-        }
+        int maxDay = getMaxDay(y, m);
+
+        if(d >= 1 && d <= maxDay)
+            printSeason(m);
+        else
+            System.out.println("-1");
     }
 
     public static boolean isLeapYear(int y) {
-        if(y % 4 == 0) {
-            if(y % 400 == 0) return true;
-            else if(y % 100 == 0) return false;
-            return true;
-        }
-        return false;
+        return (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0);
     }
 
     public static void printSeason(int m) {
@@ -49,13 +33,20 @@ public class Main {
             System.out.println("Summer");
         } else if(m >= 9 && m <= 11) {
             System.out.println("Fall");
-        } else if(m == 12 || m >= 1 && m <= 2) {
+        } else
             System.out.println("Winter");
-        }
     }
 
-    public static boolean validDay(int d, int e) {
-        if(d >= 1 && d <= e) return true;
-        else return false;
+    public static boolean validMonth(int m) {
+        return m >= 1 && m <= 12;
+    }
+
+    public static int getMaxDay(int y, int m) {
+        if (m == 2)
+            return isLeapYear(y) ? 29 : 28;
+        else if (m == 4 || m == 6 || m == 9 || m == 11)
+            return 30;
+        else
+            return 31;
     }
 }
