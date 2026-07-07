@@ -4,8 +4,8 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    static int[][] map;
     static int N, M;
+    static int[][] map;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,7 +13,9 @@ public class Main {
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
+
         map = new int[N][N];
+
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
@@ -21,49 +23,36 @@ public class Main {
             }
         }
 
-        int result = check();
+        int result = 0;
+
+        for (int i = 0; i < N; i++) {
+            if (isHappyLine(i, true))
+                result++;
+            if (isHappyLine(i, false))
+                result++;
+        }
         System.out.println(result);
     }
 
-    public static int check() {
-        int res = 0;
+    public static boolean isHappyLine(int index, boolean isRow) {
+        if (M == 1)
+            return true;
 
-        for (int i = 0; i < N; i++) {
-            int prev = map[i][0];
-            int cnt = 0;
-            for (int j = 0; j < N; j++) {
-                if (map[i][j] == prev) {
-                    cnt++;
-                    if (cnt == M) {
-                        // System.out.println("i: " + i + ", j: " + j);
-                        res++;
-                        break;
-                    }
-                } else {
-                    prev = map[i][j];
-                    cnt = 1;
-                }
-            }
+        int count = 1;
+
+        for (int i = 1; i < N; i++) {
+            int current = isRow ? map[index][i] : map[i][index];
+            int previous = isRow ? map[index][i - 1] : map[i - 1][index];
+
+            if (current == previous)
+                count++;
+            else
+                count = 1;
+
+            if (count >= M)
+                return true;
         }
 
-        for (int j = 0; j < N; j++) {
-            int prev = map[0][j];
-            int cnt = 0;
-            for (int i = 0; i < N; i++) {
-                if (map[i][j] == prev) {
-                    cnt++;
-                    if (cnt == M) {
-                        // System.out.println("i: " + i + ", j: " + j);
-                        res++;
-                        break;
-                    }
-                } else {
-                    prev = map[i][j];
-                    cnt = 1;
-                }
-            }
-        }
-
-        return res;
+        return false;
     }
 }
